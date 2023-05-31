@@ -1,5 +1,6 @@
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'dart:math';
+import 'package:syncfusion_flutter_charts/charts.dart';
 
 class ProblemRating {
   String x;
@@ -17,46 +18,59 @@ class Bar extends StatefulWidget {
 
 class _BarState extends State<Bar> {
   List<ProblemRating> lis = [];
+  int m = 0, y = 0;
   sorting() {
     widget.data.forEach((k, v) => lis.add(ProblemRating(k, v)));
   }
 
   @override
-  void initState() {
-    super.initState();
-    sorting();
-    // TODO: implement initState
-  }
-
-  @override
   Widget build(BuildContext context) {
+    lis.clear();
+    sorting();
+    m = lis.length;
+    if (m > 7) {
+      y = 7;
+    } else {
+      y = m;
+    }
+    //print('${lis[0].y}');
     return Container(
-      margin: EdgeInsets.all(20),
-      padding: EdgeInsets.all(20),
+      padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+      margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+      //constraints: BoxConstraints(minWidth: 10, maxWidth: 10),,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Colors.grey[900],
         borderRadius: BorderRadius.circular(20),
       ),
-      child: SizedBox(
-        width: 500.0,
-        height: 500.0,
-        child: BarChart(BarChartData(
-            minY: 0,
-            maxY: 500,
-            gridData: FlGridData(show: false),
-            barTouchData: BarTouchData(enabled: true),
-            titlesData: FlTitlesData(
-              show: true,
-              rightTitles:
-                  AxisTitles(sideTitles: SideTitles(showTitles: false)),
-              topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-            ),
-            barGroups: lis
-                .map((element) =>
-                    BarChartGroupData(x: int.parse(element.x), barRods: [
-                      BarChartRodData(toY: element.y.toDouble()),
-                    ]))
-                .toList())),
+      child: SfCartesianChart(
+        title: ChartTitle(
+            text: 'Problem Ratings', textStyle: TextStyle(color: Colors.white)),
+        tooltipBehavior: TooltipBehavior(
+          enable: true,
+        ),
+        primaryXAxis: CategoryAxis(
+          visibleMinimum: y.toDouble(),
+          visibleMaximum: m.toDouble(),
+        ),
+        primaryYAxis: NumericAxis(
+            majorGridLines: const MajorGridLines(
+          width: 0,
+        )),
+        zoomPanBehavior: ZoomPanBehavior(
+          enablePanning: true,
+        ),
+        series: <ColumnSeries<ProblemRating, String>>[
+          ColumnSeries<ProblemRating, String>(
+            // Binding the chartData to the dataSource of the bar series.
+            enableTooltip: true,
+            dataSource: lis,
+            xValueMapper: (ProblemRating rating, _) => rating.x,
+            yValueMapper: (ProblemRating rating, _) => rating.y,
+            name: 'problem',
+            spacing: 0.5,
+            animationDuration: 200,
+          ),
+        ],
       ),
     );
   }

@@ -5,6 +5,7 @@ class Handle {
   String handle = "";
   late Map userData;
   late Map submissionData;
+  late Map ratingChange;
   String verified = "failed";
   Handle({required this.handle});
   Future<void> getInfo() async {
@@ -14,6 +15,10 @@ class Handle {
     var submission_response = await http.get(
         Uri.parse('https://codeforces.com/api/user.status?handle=$handle'));
     submissionData = jsonDecode(submission_response.body);
+    var rating_response = await http.get(
+        Uri.parse('https://codeforces.com/api/user.rating?handle=$handle'));
+    ratingChange = jsonDecode(rating_response.body);
+    //print(ratingChange);
     verified = userData['status'];
   }
 }

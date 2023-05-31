@@ -1,6 +1,6 @@
 class ProblemData {
   Map data = {};
-  Map<String, double> problemtag = {};
+  Map<String, int> problemtag = {};
   Map<String, int> problemrating = {};
   ProblemData({required this.data});
   void problemRating() {
@@ -21,13 +21,13 @@ class ProblemData {
           problemtag.update(
             len[i]['problem']['tags'][j].toString(),
             (value) => ++value,
-            ifAbsent: () => 1.0,
+            ifAbsent: () => 1,
           );
         }
       }
-      problemrating.remove('null');
-      problemrating = Map.fromEntries(problemrating.entries.toList()
-        ..sort((e1, e2) => int.parse(e1.key).compareTo(int.parse(e2.key))));
     }
+    problemrating.remove('null');
+    problemrating = Map.fromEntries(problemrating.entries.toList()
+      ..sort((e1, e2) => int.parse(e1.key).compareTo(int.parse(e2.key))));
   }
 }

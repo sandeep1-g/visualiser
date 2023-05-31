@@ -3,6 +3,7 @@ import 'package:visualiser/user_handle.dart';
 import 'package:visualiser/piechart.dart';
 import 'package:visualiser/problemrating.dart';
 import 'package:visualiser/barchart.dart';
+//import 'package:visualiser/table.dart';
 
 void main() {
   runApp(const MaterialApp(
@@ -13,9 +14,10 @@ void main() {
 Widget rw = Row();
 Widget w1 = Row();
 Widget w2 = Row();
-Container container = Container();
+Widget w3 = Row();
 Map user_data = {};
 Map contest_data = {};
+Map Rating_data = {};
 
 class MyWidget extends StatefulWidget {
   const MyWidget({super.key});
@@ -34,7 +36,7 @@ class _MyWidgetState extends State<MyWidget> {
     return Scaffold(
         backgroundColor: Colors.black,
         appBar:
-            AppBar(title: const Center(child: Text(' Codeforces visaliser'))),
+            AppBar(title: const Center(child: Text(' Codeforces visualiser'))),
         body: Padding(
           padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
           child: ListView(
@@ -46,14 +48,16 @@ class _MyWidgetState extends State<MyWidget> {
                   SizedBox(
                       width: 300,
                       child: TextField(
-                        cursorColor: Colors.black,
-                        style: TextStyle(color: Colors.white),
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: Colors.blueAccent,
-                          border: OutlineInputBorder(
-                              borderSide: BorderSide.none,
-                              borderRadius: BorderRadius.circular(50)),
+                        textAlign: TextAlign.center,
+                        cursorColor: Colors.white,
+                        style: const TextStyle(color: Colors.white),
+                        decoration: const InputDecoration(
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.cyan),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.cyan),
+                          ),
                         ),
                         controller: textController,
                         maxLines: null,
@@ -67,34 +71,49 @@ class _MyWidgetState extends State<MyWidget> {
                         if (user.verified == 'OK') {
                           user_data = user.userData;
                           contest_data = user.submissionData;
+                          Rating_data = user.ratingChange;
+                          ProblemData da = ProblemData(data: contest_data);
+                          // print(Rating_data['result']);
+                          // var test = testing(Rating_data['result']);
+                          // test.use();
+                          da.problemRating();
+                          rw = UserData(user: user_data);
+                          w1 = PieChart(tagdata: da.problemtag);
+                          w2 = Bar(data: da.problemrating);
+                          //w3 = Ratings(rating: Rating_data['result']);
+                        } else {
+                          rw = const Center(
+                            child: Text(
+                              'Enter valid username',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          );
+                          w2 = Row();
+                          w1 = Row();
+                          w3 = Row();
                         }
-                        print(user_data);
                         setState(() {
-                          if (user.verified == 'OK') {
-                            ProblemData da = ProblemData(data: contest_data);
-                            da.problemRating();
-                            rw = UserData(user: user_data);
-                            w1 = PieCharti(data: da.problemtag);
-                            w2 = Bar(data: da.problemrating);
-                          } else {
-                            rw = Center(
-                              child: const Text(
-                                'Enter valid username',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            );
-                            w2 = Row();
-                            w1 = Row();
-                          }
+                          rw;
+                          w1;
+                          w2;
+                          //w3;
                         });
                       },
                       icon: const Icon(Icons.search))
                 ],
               ),
-              const SizedBox(height: 35, width: 35),
+              const SizedBox(height: 25, width: 35),
               rw,
+              const SizedBox(height: 25, width: 35),
               w1,
+              const SizedBox(
+                height: 25,
+              ),
               w2,
+              const SizedBox(
+                height: 25,
+              ),
+              // w3,
             ],
           ),
         ));
