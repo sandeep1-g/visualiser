@@ -3,7 +3,7 @@ import 'package:visualiser/user_handle.dart';
 import 'package:visualiser/piechart.dart';
 import 'package:visualiser/problemrating.dart';
 import 'package:visualiser/barchart.dart';
-//import 'package:visualiser/table.dart';
+import 'package:visualiser/table.dart';
 
 void main() {
   runApp(const MaterialApp(
@@ -73,18 +73,21 @@ class _MyWidgetState extends State<MyWidget> {
                           contest_data = user.submissionData;
                           Rating_data = user.ratingChange;
                           ProblemData da = ProblemData(data: contest_data);
-                          // print(Rating_data['result']);
-                          // var test = testing(Rating_data['result']);
-                          // test.use();
                           da.problemRating();
                           rw = UserData(user: user_data);
                           w1 = PieChart(tagdata: da.problemtag);
                           w2 = Bar(data: da.problemrating);
-                          //w3 = Ratings(rating: Rating_data['result']);
+                          w3 = RatingTable(rating: Rating_data['result']);
                         } else {
-                          rw = const Center(
+                          String error = " ";
+                          if (user.verified == "error") {
+                            error = "Not connected to network";
+                          } else {
+                            error = "Enter valid username";
+                          }
+                          rw = Center(
                             child: Text(
-                              'Enter valid username',
+                              error,
                               style: TextStyle(color: Colors.white),
                             ),
                           );
@@ -96,7 +99,7 @@ class _MyWidgetState extends State<MyWidget> {
                           rw;
                           w1;
                           w2;
-                          //w3;
+                          w3;
                         });
                       },
                       icon: const Icon(Icons.search))
@@ -113,7 +116,7 @@ class _MyWidgetState extends State<MyWidget> {
               const SizedBox(
                 height: 25,
               ),
-              // w3,
+              w3,
             ],
           ),
         ));

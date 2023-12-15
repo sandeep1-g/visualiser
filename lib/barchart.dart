@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:math';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class ProblemRating {
@@ -33,7 +32,6 @@ class _BarState extends State<Bar> {
     } else {
       y = m;
     }
-    //print('${lis[0].y}');
     return Container(
       padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
       margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),

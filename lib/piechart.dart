@@ -10,8 +10,8 @@ class Chart {
 }
 
 class PieChart extends StatefulWidget {
-  final Map<String, int> tagdata;
-  const PieChart({super.key, required this.tagdata});
+  late Map<String, int> tagdata;
+  PieChart({super.key, required this.tagdata});
   @override
   State<PieChart> createState() => _PieChartState();
 }
